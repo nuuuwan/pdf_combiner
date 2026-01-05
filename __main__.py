@@ -29,9 +29,8 @@ def combine_pdfs(directory, max_pages=5):
         total_pages = len(reader.pages)
         # Add only the first max_pages (or fewer if PDF has less than max_pages)
         pages_to_add = min(max_pages, total_pages)
-        print(
-            f"Adding: {pdf_file.name} ({total_pages} pages, {pages_to_add} pages added)"
-        )
+        file_size_mb = pdf_file.stat().st_size / (1024 * 1024)
+        print(f"{pages_to_add:>3}, {file_size_mb:>7.2f}, {pdf_file.name}")
         for page_num in range(pages_to_add):
             writer.add_page(reader.pages[page_num])
 
