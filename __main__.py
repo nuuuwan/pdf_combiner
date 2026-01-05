@@ -25,10 +25,13 @@ def combine_pdfs(directory, max_pages=5):
 
     # Add first max_pages of each PDF to writer
     for pdf_file in pdf_files:
-        print(f"Adding: {pdf_file.name}")
         reader = PdfReader(str(pdf_file))
+        total_pages = len(reader.pages)
         # Add only the first max_pages (or fewer if PDF has less than max_pages)
-        pages_to_add = min(max_pages, len(reader.pages))
+        pages_to_add = min(max_pages, total_pages)
+        print(
+            f"Adding: {pdf_file.name} ({total_pages} pages, {pages_to_add} pages added)"
+        )
         for page_num in range(pages_to_add):
             writer.add_page(reader.pages[page_num])
 
@@ -44,7 +47,8 @@ def combine_pdfs(directory, max_pages=5):
     file_size = output_path.stat().st_size
     file_size_mb = file_size / (1024 * 1024)
     print(f"Combined PDF saved to: {output_path}")
-    print(f"File size: {file_size:,} bytes ({file_size_mb:.2f} MB)")
+    print(f"Total pages in final PDF: {len(writer.pages)}")
+    print(f"File size: {file_size_mb:.2f} MB")
 
 
 if __name__ == "__main__":
